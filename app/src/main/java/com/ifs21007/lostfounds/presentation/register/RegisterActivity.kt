@@ -1,4 +1,4 @@
-package com.ifs21014.lostfounds.presentation.register
+package com.ifs21007.lostfounds.presentation.register
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.ifs21007.lostfounds.data.remote.MyResult
 import com.ifs21007.lostfounds.databinding.ActivityRegisterBinding
 import com.ifs21007.lostfounds.presentation.ViewModelFactory
-import com.ifs21014.lostfounds.presentation.login.LoginActivity
+import com.ifs21007.lostfounds.presentation.login.LoginActivity
+import com.ifs21007.lostfounds.presentation.register.RegisterViewModel
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding

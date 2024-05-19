@@ -8,11 +8,11 @@ import com.ifs21007.lostfounds.data.repository.LocalLostFoundRepository
 import com.ifs21007.lostfounds.data.repository.LostFoundRepository
 import com.ifs21007.lostfounds.data.repository.UserRepository
 import com.ifs21007.lostfounds.di.Injection
-import com.ifs21014.lostfounds.presentation.login.LoginViewModel
+import com.ifs21007.lostfounds.presentation.login.LoginViewModel
 import com.ifs21007.lostfounds.presentation.lostfound.LostFoundViewModel
 import com.ifs21007.lostfounds.presentation.main.MainViewModel
-import com.ifs21014.lostfounds.presentation.profile.ProfileViewModel
-import com.ifs21014.lostfounds.presentation.register.RegisterViewModel
+import com.ifs21007.lostfounds.presentation.profile.ProfileViewModel
+import com.ifs21007.lostfounds.presentation.register.RegisterViewModel
 
 class ViewModelFactory(
     private val authRepository: AuthRepository,

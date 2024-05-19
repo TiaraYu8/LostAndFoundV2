@@ -6,13 +6,17 @@ import com.ifs21007.lostfounds.data.remote.response.DelcomResponse
 import com.ifs21007.lostfounds.data.remote.response.DelcomLostFoundResponse
 import com.ifs21007.lostfounds.data.remote.response.DelcomLostFoundsResponse
 import com.ifs21007.lostfounds.data.remote.response.DelcomUserResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
 import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -35,12 +39,20 @@ interface IApiService {
     @GET("users/me")
     suspend fun getMe(): DelcomUserResponse
 
+    @Multipart
+    @POST("users/photo")
+    suspend fun addPhoto(
+        @Part photo: MultipartBody.Part,
+    ): DelcomResponse
+
     @FormUrlEncoded
     @POST("lost-founds")
+    @Multipart
     suspend fun postLostFound(
-        @Field("title") title: String,
-        @Field("description") description: String,
-        @Field("status") status: String,
+        @Part("title") title: RequestBody,
+        @Part("description") description: RequestBody,
+        @Part("status") status: RequestBody,
+        @Part("cover")cover: MultipartBody.Part,
     ): DelcomAddLostFoundResponse
 
     @FormUrlEncoded
@@ -69,4 +81,12 @@ interface IApiService {
     suspend fun delete(
         @Path("id") lostFoundId: Int,
     ): DelcomResponse
+
+    @Multipart
+    @POST("lost-founds/{id}/cover")
+    suspend fun addCover(
+        @Path("id") lostFoundId: Int,
+        @Part cover: MultipartBody.Part,
+    ): DelcomResponse
+
 }

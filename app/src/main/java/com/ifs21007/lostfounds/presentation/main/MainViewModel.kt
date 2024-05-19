@@ -37,6 +37,20 @@ class MainViewModel(
         return lostFoundRepository.getAll(null, 0, null).asLiveData()
     }
 
+    fun getChecked(): LiveData<MyResult<DelcomLostFoundsResponse>> {
+        return lostFoundRepository.getAll(1, 0, null).asLiveData()
+    }
+    fun getUnChecked(): LiveData<MyResult<DelcomLostFoundsResponse>> {
+        return lostFoundRepository.getAll(0, 0, null).asLiveData()
+    }
+
+    fun getLost(): LiveData<MyResult<DelcomLostFoundsResponse>> {
+        return lostFoundRepository.getAll(null, 0, "lost").asLiveData()
+    }
+    fun getFound(): LiveData<MyResult<DelcomLostFoundsResponse>> {
+        return lostFoundRepository.getAll(null, 0, "found").asLiveData()
+    }
+
     fun putTodo(
         lostfoundId: Int,
         title: String,

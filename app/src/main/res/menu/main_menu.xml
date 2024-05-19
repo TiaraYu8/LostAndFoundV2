@@ -23,5 +23,22 @@
             android:id="@+id/mainMenuFavoriteTodos"
             android:title="Favorite "
             app:showAsAction="never" />
+        <item
+            android:id="@+id/alllost"
+            android:title="Lost"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/allFound"
+            android:title="Found"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/allChecked"
+            android:title="Completed"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/allUnchecked"
+            android:title="Incompleted"
+            app:showAsAction="never" />
+
     </group>
 </menu>

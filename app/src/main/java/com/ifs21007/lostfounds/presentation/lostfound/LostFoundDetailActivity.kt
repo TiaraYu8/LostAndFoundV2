@@ -2,16 +2,19 @@ package com.ifs21007.lostfounds.presentation.lostfound
 
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.ifs21007.lostfounds.R
 import com.ifs21007.lostfounds.data.remote.response.LostFoundResponse
 import com.ifs21007.lostfounds.data.local.entity.DelcomLostFoundEntity
@@ -19,10 +22,17 @@ import com.ifs21007.lostfounds.data.model.LostFound
 import com.ifs21007.lostfounds.data.remote.MyResult
 import com.ifs21007.lostfounds.databinding.ActivityLostfoundDetailBinding
 import com.ifs21007.lostfounds.helper.Utils.Companion.observeOnce
+import com.ifs21007.lostfounds.helper.reduceFileImage
+import com.ifs21007.lostfounds.helper.uriToFile
 import com.ifs21007.lostfounds.presentation.ViewModelFactory
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 
 class LostFoundDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLostfoundDetailBinding
+    private var currentImageUri: Uri? = null
+
     private val viewModel by viewModels<LostFoundViewModel> {
         ViewModelFactory.getInstance(this)
     }
@@ -34,7 +44,19 @@ class LostFoundDetailActivity : AppCompatActivity() {
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == LostFoundManageActivity.RESULT_CODE) {
-            recreate()
+            val updatedLostFound = result.data?.getParcelableExtra<LostFound>("updated_lostfound")
+            if (updatedLostFound != null) {
+                binding.apply{
+                    Glide.with(this@LostFoundDetailActivity)
+                        .load(updatedLostFound)
+                        .placeholder(R.drawable.ic_image_24)
+                        .into(ivLostFoundDetailCover)
+                }
+
+            } else{
+                recreate()
+            }
+
         }
     }
 
@@ -45,6 +67,8 @@ class LostFoundDetailActivity : AppCompatActivity() {
 
         setupView()
         setupAction()
+
+        window.setWindowAnimations(0)
     }
 
     private fun setupView() {
@@ -103,6 +127,16 @@ class LostFoundDetailActivity : AppCompatActivity() {
                 tvLostFoundDetailDate.text = "Diposting pada: ${todo.createdAt}"
                 tvLostFoundDetailDesc.text = todo.description
 
+                if(todo.cover != null){
+                    ivLostFoundDetailCover.visibility = View.VISIBLE
+                    Glide.with(this@LostFoundDetailActivity)
+                        .load(todo.cover)
+                        .placeholder(R.drawable.ic_image_24)
+                        .into(ivLostFoundDetailCover)
+                }else{
+                    ivLostFoundDetailCover.visibility = View.GONE
+                }
+
                 viewModel.getLocalLostFound(todo.id).observeOnce {
                     if(it != null){
                         delcomLostFound = it
@@ -116,7 +150,7 @@ class LostFoundDetailActivity : AppCompatActivity() {
 
                 val statusText = if (todo.status.equals("found", ignoreCase = true)) {
                     // Jika status "found", maka gunakan warna hijau
-                    highlightText("Found", Color.GREEN)
+                    highlightText("Found", Color.YELLOW)
                 } else {
                     // Jika status "lost", maka gunakan warna kuning
                     highlightText("Lost", Color.RED)
@@ -255,6 +289,46 @@ class LostFoundDetailActivity : AppCompatActivity() {
         }
     }
 
+    private fun observeAddCoverTodo(
+        todoId: Int,
+    ) {
+        val imageFile = uriToFile(currentImageUri!!, this).reduceFileImage()
+        val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
+        val reqPhoto = MultipartBody.Part.createFormData(
+            "cover",
+            imageFile.name,
+            requestImageFile
+        )
+        viewModel.addCover(todoId, reqPhoto).observeOnce { result ->
+            when (result) {
+                is MyResult.Loading -> {
+                    showLoading(true)
+                }
+                is MyResult.Success -> {
+                    showLoading(false)
+                    val resultIntent = Intent()
+                    setResult(LostFoundManageActivity.RESULT_CODE, resultIntent)
+                    finishAfterTransition()
+                }
+                is MyResult.Error -> {
+                    showLoading(false)
+                    AlertDialog.Builder(this@LostFoundDetailActivity).apply {
+                        setTitle("Oh No!")
+                        setMessage(result.error)
+                        setPositiveButton("Oke") { _, _ ->
+                            val resultIntent = Intent()
+                            setResult(RESULT_CODE, resultIntent)
+                            finishAfterTransition()
+                        }
+                        setCancelable(false)
+                        create()
+                        show()
+                    }
+                }
+            }
+        }
+    }
+
     private fun setFavorite(status: Boolean){
         isFavorite = status
         if(status){
@@ -321,7 +395,6 @@ class LostFoundDetailActivity : AppCompatActivity() {
         binding.llLostFoundDetail.visibility =
             if (status) View.VISIBLE else View.GONE
     }
-
     companion object {
         const val KEY_TODO_ID = "todo_id"
         const val KEY_IS_CHANGED = "is_changed"

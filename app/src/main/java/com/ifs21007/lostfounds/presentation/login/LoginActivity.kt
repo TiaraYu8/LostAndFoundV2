@@ -1,4 +1,4 @@
-package com.ifs21014.lostfounds.presentation.login
+package com.ifs21007.lostfounds.presentation.login
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,7 +12,8 @@ import com.ifs21007.lostfounds.data.remote.MyResult
 import com.ifs21007.lostfounds.databinding.ActivityLoginBinding
 import com.ifs21007.lostfounds.presentation.ViewModelFactory
 import com.ifs21007.lostfounds.presentation.main.MainActivity
-import com.ifs21014.lostfounds.presentation.register.RegisterActivity
+import com.ifs21007.lostfounds.presentation.register.RegisterActivity
+import com.ifs21007.lostfounds.presentation.login.LoginViewModel
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {

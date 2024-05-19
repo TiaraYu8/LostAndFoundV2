@@ -20,11 +20,11 @@ import com.ifs21007.lostfounds.data.remote.MyResult
 import com.ifs21007.lostfounds.databinding.ActivityMainBinding
 import com.ifs21007.lostfounds.helper.Utils.Companion.observeOnce
 import com.ifs21007.lostfounds.presentation.ViewModelFactory
-import com.ifs21014.lostfounds.presentation.login.LoginActivity
+import com.ifs21007.lostfounds.presentation.login.LoginActivity
 import com.ifs21007.lostfounds.presentation.lostfound.LostFoundDetailActivity
 import com.ifs21007.lostfounds.presentation.lostfound.LostFoundFavoriteActivity
 import com.ifs21007.lostfounds.presentation.lostfound.LostFoundManageActivity
-import com.ifs21014.lostfounds.presentation.profile.ProfileActivity
+import com.ifs21007.lostfounds.presentation.profile.ProfileActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -102,6 +102,27 @@ class MainActivity : AppCompatActivity() {
                     openFavoriteLostFoundActivity()
                     true
                 }
+
+                R.id.alllost -> {
+                    getLost()
+                    true
+                }
+
+                R.id.allFound -> {
+                    getFound()
+                    true
+                }
+
+                R.id.allChecked -> {
+                    getChecked()
+                    true
+                }
+
+                R.id.allUnchecked -> {
+                    getUnchecked()
+                    true
+                }
+
                 else -> false
             }
         }
@@ -141,6 +162,95 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun getLost() {
+        viewModel.getLost().observe(this) { result ->
+            if (result != null) {
+                when (result) {
+                    is MyResult.Loading -> {
+                        showLoading(true)
+                    }
+
+                    is MyResult.Success -> {
+                        showLoading(false)
+                        loadAllToLayout(result.data)
+                    }
+
+                    is MyResult.Error -> {
+                        showLoading(false)
+                        showEmptyError(true)
+                    }
+                }
+            }
+        }
+    }
+    private fun getFound() {
+        viewModel.getFound().observe(this) { result ->
+            if (result != null) {
+                when (result) {
+                    is MyResult.Loading -> {
+                        showLoading(true)
+                    }
+
+                    is MyResult.Success -> {
+                        showLoading(false)
+                        loadAllToLayout(result.data)
+                    }
+
+                    is MyResult.Error -> {
+                        showLoading(false)
+                        showEmptyError(true)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getChecked() {
+        viewModel.getChecked().observe(this) { result ->
+            if (result != null) {
+                when (result) {
+                    is MyResult.Loading -> {
+                        showLoading(true)
+                    }
+
+                    is MyResult.Success -> {
+                        showLoading(false)
+                        loadAllToLayout(result.data)
+                    }
+
+                    is MyResult.Error -> {
+                        showLoading(false)
+                        showEmptyError(true)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getUnchecked() {
+        viewModel.getUnChecked().observe(this) { result ->
+            if (result != null) {
+                when (result) {
+                    is MyResult.Loading -> {
+                        showLoading(true)
+                    }
+
+                    is MyResult.Success -> {
+                        showLoading(false)
+                        loadAllToLayout(result.data)
+                    }
+
+                    is MyResult.Error -> {
+                        showLoading(false)
+                        showEmptyError(true)
+                    }
+                }
+            }
+        }
+    }
+
+
+
     private fun observeGetAll() {
         viewModel.getAllTodos().observe(this) { result ->
             if (result != null) {
@@ -162,6 +272,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+
 
     private fun loadAllToLayout(response: DelcomLostFoundsResponse) {
         // Periksa apakah response atau data pada response null

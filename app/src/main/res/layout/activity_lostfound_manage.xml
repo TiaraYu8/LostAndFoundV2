@@ -21,7 +21,7 @@
             android:background="#B0926A"
             app:navigationIcon="@drawable/ic_arrow_back_24"
             app:navigationIconTint="@color/white"
-            app:title="Tambah Todo"
+            app:title="Tambah Lost and Found"
             app:titleTextColor="@color/white" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -95,6 +95,31 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etLostFoundManageDesc"
                 app:srcCompat="@drawable/picture" />
+            <LinearLayout
+                android:id="@+id/llTodoManageActionCover"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivSelectedImage">
+
+                <Button
+                    android:id="@+id/btnTodoManageCamera"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:text="Camera" />
+
+                <Button
+                    android:id="@+id/btnTodoManageGallery"
+                    android:layout_width="110dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:text="Gallery" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/textView5"
@@ -104,7 +129,7 @@
                 android:text="Post Status"
                 app:layout_constraintBottom_toTopOf="@+id/etLostFoundManageStatus"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnLostFoundPicture" />
+                app:layout_constraintTop_toBottomOf="@+id/llTodoManageActionCover" />
 
             <Spinner
                 android:id="@+id/etLostFoundManageStatus"
@@ -139,17 +164,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/btnLostFoundManageSave"
                 app:layout_constraintTop_toTopOf="@+id/btnLostFoundManageSave" />
-
-            <Button
-                android:id="@+id/btnLostFoundPicture"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Pilih Gambar"
-                app:cornerRadius="2pt"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivSelectedImage" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
